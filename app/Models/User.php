@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -21,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'superior_id'
     ];
 
     /**
@@ -30,7 +34,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -44,5 +47,30 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function superior(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'superior_id');
+    }
+
+    public function subordinates(): HasMany
+    {
+        return $this->hasMany(User::class, 'superior_id');
+    }
+
+    public function employees(): HasMany
+    {
+        return $this->hasMany(Employee::class, 'superior_id');
+    }
+
+    public function approvals(): HasMany
+    {
+        return $this->hasMany(Approval::class, 'approver_id');
+    }
+
+    public function createdReservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class, 'created_by_admin_id');
     }
 }
