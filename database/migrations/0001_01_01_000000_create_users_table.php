@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->foreignId('superior_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('password');
+            $table->enum('role', ['admin', 'approver']);
+            $table->foreignId('location_id')->constrained('users');
             $table->rememberToken();
             $table->timestamps();
         });
