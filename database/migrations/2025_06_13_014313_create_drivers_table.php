@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone_number', 20);
             $table->boolean('is_available')->default(true);
-            $table->foreignId('superior_id')->constrained('users')->onDelete('set null');
-            $table->foreignId('location_id')->constrained('locations');
             $table->timestamps();
         });
     }
