@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('superior_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('password');
             $table->enum('role', ['admin', 'approver']);
+            $table->rememberToken();
             $table->timestamps();
         });
 
