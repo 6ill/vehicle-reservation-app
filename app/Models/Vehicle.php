@@ -16,8 +16,6 @@ class Vehicle extends Model
         'license_plate',
         'type',
         'ownership',
-        'fuel_consumption',
-        'service_schedule',
         'status',
         'base_location_id'
     ];
@@ -30,5 +28,15 @@ class Vehicle extends Model
     public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
+    }
+
+    public function fuelLogs(): HasMany
+    {
+        return $this->hasMany(FuelLog::class);
+    }
+
+    public function serviceHistory(): HasMany
+    {
+        return $this->hasMany(ServiceHistory::class);
     }
 }

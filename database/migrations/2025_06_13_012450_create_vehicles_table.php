@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('license_plate')->unique();
             $table->enum('type', ['angkutan_orang', 'angkutan_barang']);
             $table->enum('ownership', ['company', 'rental']);
-            $table->decimal('fuel_consumption', 8, 2)->nullable()->comment('Liter per KM');
-            $table->date('service_schedule')->nullable();
             $table->enum('status', ['available', 'in_use', 'maintenance'])->default('available');
             $table->foreignId('base_location_id')->constrained('locations');
             $table->timestamps();
