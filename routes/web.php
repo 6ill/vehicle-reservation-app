@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\VehicleController;
+use App\Http\Controllers\Approver\ApprovalController;
+use App\Http\Controllers\Approver\DashboardController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -44,10 +46,11 @@ Route::middleware('auth')->group(function () {
     });
 
     // Grup untuk Approver
-    Route::middleware('role:approver')->prefix('approver')->group(function () {
-        Route::get('/dashboard', function () {
-            return '<h1>Selamat Datang di Dashboard Approver</h1>';
-        })->name('approver.dashboard');
-        // Rute-rute approver lainnya (daftar persetujuan, dll) akan ada di sini
+    Route::middleware('role:approver')->prefix('approver')->as('approver.')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::controller(ApprovalController::class)->prefix('approvals')->as('approvals.')->group(function() {
+            Route::post('/{approval}/approve', 'approve')->name('approve');
+            Route::post('/{approval}/reject', 'reject')->name('reject');
+        });
     });
 });
