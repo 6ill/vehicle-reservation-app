@@ -14,7 +14,6 @@ class FuelLog extends Model
         'vehicle_id',
         'reservation_id',
         'refuel_date',
-        'odometer_reading',
         'liters_filled',
         'cost',       
     ];

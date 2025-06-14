@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->constrained('vehicles')->onDelete('cascade');
             $table->foreignId('reservation_id')->nullable()->constrained('reservations')->onDelete('set null');
             $table->date('refuel_date');
-            $table->integer('odometer_reading');
             $table->decimal('liters_filled', 8, 2);
             $table->decimal('cost', 10, 2)->nullable();
             $table->timestamps();
