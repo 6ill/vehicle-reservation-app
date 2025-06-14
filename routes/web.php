@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\FuelLogController;
 use App\Http\Controllers\Admin\ReservationController;
+use App\Http\Controllers\Admin\ServiceHistoryController;
 use App\Http\Controllers\Admin\VehicleController;
 use App\Http\Controllers\Approver\ApprovalController;
 use App\Http\Controllers\Approver\DashboardController;
@@ -43,6 +44,7 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('vehicles', VehicleController::class);
         Route::resource('vehicles.fuel-logs', FuelLogController::class)->shallow();
+        Route::resource('vehicles.service-history', ServiceHistoryController::class)->shallow();
         Route::resource('drivers', DriverController::class);
         Route::resource('reservations', ReservationController::class);
         Route::post('reservations/{reservation}/complete', [ReservationController::class, 'markAsCompleted'])->name('reservations.complete');

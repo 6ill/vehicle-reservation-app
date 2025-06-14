@@ -35,19 +35,40 @@
                             <p class="text-gray-600 whitespace-no-wrap">{{ Str::ucfirst($vehicle->ownership) }}</p>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                                <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                                <span class="relative">{{ $vehicle->status }}</span>
+                            @php
+                                $statusTextColor = '';
+                                $statusBgColor = '';
+                                switch ($vehicle->status) {
+                                    case 'in_use':
+                                        $statusTextColor = 'text-yellow-900';
+                                        $statusBgColor = 'bg-yellow-200';
+                                        break;
+                                    case 'maintenance':
+                                        $statusTextColor = 'text-blue-900';
+                                        $statusBgColor = 'bg-blue-200';
+                                        break;
+                                    case 'available':
+                                        $statusTextColor = 'text-green-900';
+                                        $statusBgColor = 'bg-green-200';
+                                        break;
+                                }
+                            @endphp
+                            <span class="relative inline-block px-3 py-1 font-semibold {{ $statusTextColor }} leading-tight">
+                                <span aria-hidden class="absolute inset-0 {{ $statusBgColor }} opacity-50 rounded-full"></span>
+                                <span class="relative">{{ Str::ucfirst(str_replace('_', ' ',$vehicle->status)) }}</span>
                             </span>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-                            <a href="{{ route('admin.vehicles.fuel-logs.index', $vehicle) }}" class="text-blue-600 hover:text-blue-900 mr-4">Lihat BBM</a>
-                            <a href="{{ route('admin.vehicles.edit', $vehicle) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
-                            <form action="{{ route('admin.vehicles.destroy', $vehicle) }}" method="POST" class="inline-block">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Anda yakin?')">Hapus</button>
-                            </form>
+                            <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
+                                <a href="{{ route('admin.vehicles.service-history.index', $vehicle) }}" class="text-green-600 hover:text-green-900 mr-4">Riwayat Servis</a>
+                                <a href="{{ route('admin.vehicles.fuel-logs.index', $vehicle) }}" class="text-blue-600 hover:text-blue-900 mr-4">Lihat BBM</a>
+                                <a href="{{ route('admin.vehicles.edit', $vehicle) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
+                                <form action="{{ route('admin.vehicles.destroy', $vehicle) }}" method="POST" class="inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-900 mr-4" onclick="return confirm('Anda yakin?')">Hapus</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @empty
