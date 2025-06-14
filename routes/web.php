@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\Admin\FuelLogController;
 use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\VehicleController;
 use App\Http\Controllers\Approver\ApprovalController;
@@ -39,8 +40,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', function () {
             return '<h1>Selamat Datang di Dashboard Admin</h1>';
         })->name('dashboard');
-        // Rute-rute admin lainnya (manajemen user, kendaraan, dll) akan ada di sini
+
         Route::resource('vehicles', VehicleController::class);
+        Route::resource('vehicles.fuel-logs', FuelLogController::class)->shallow();
         Route::resource('drivers', DriverController::class);
         Route::resource('reservations', ReservationController::class);
         Route::post('reservations/{reservation}/complete', [ReservationController::class, 'markAsCompleted'])->name('reservations.complete');

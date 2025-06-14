@@ -41,6 +41,7 @@
                             </span>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+                            <a href="{{ route('admin.vehicles.fuel-logs.index', $vehicle) }}" class="text-blue-600 hover:text-blue-900 mr-4">Lihat BBM</a>
                             <a href="{{ route('admin.vehicles.edit', $vehicle) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
                             <form action="{{ route('admin.vehicles.destroy', $vehicle) }}" method="POST" class="inline-block">
                                 @csrf
