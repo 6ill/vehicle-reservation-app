@@ -4,7 +4,6 @@
     <form action="{{ route('admin.vehicles.update', $vehicle) }}" method="POST">
         @csrf
         @method('PUT')
-        {{-- Variabel $vehicle dan $locations diteruskan dari VehicleController@edit --}}
-        @include('admin.vehicles._form')
+        @include('admin.vehicles.partials._form')
     </form>
 </x-layouts.admin>
