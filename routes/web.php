@@ -3,10 +3,23 @@
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\VehicleController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    // temporary
+    if (Auth::guest()) {
+        return redirect()->route('login');
+    }
+
+    $user = Auth::user();
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+
+    if ($user->role === 'approver') {
+        return redirect()->route('approver.dashboard');
+    }
+
     return redirect()->route('login');
 });
 
