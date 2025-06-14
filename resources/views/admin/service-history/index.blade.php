@@ -8,7 +8,7 @@
         </a>
     </div>
 
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+    <div class="bg-white shadow-md rounded-lg overflow-x-auto">
         <table class="min-w-full leading-normal">
             <thead>
                 <tr>
