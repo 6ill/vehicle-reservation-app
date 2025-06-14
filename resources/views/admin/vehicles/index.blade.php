@@ -1,61 +1,62 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Manajemen Kendaraan</title>
-    <style> /* Anda bisa menggunakan CSS framework di sini */
-        body { font-family: sans-serif; margin: 2rem; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        .btn { padding: 5px 10px; text-decoration: none; border-radius: 4px; color: white; }
-        .btn-create { background-color: #28a745; margin-bottom: 1rem; display: inline-block;}
-        .btn-edit { background-color: #ffc107; }
-        .btn-delete { background-color: #dc3545; border: none; cursor: pointer; }
-        .alert-success { padding: 1rem; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; margin-bottom: 1rem; }
-    </style>
-</head>
-<body>
-    @include('admin.layouts._nav')
-    <h1>Manajemen Kendaraan</h1>
-    <a href="{{ route('admin.vehicles.create') }}" class="btn btn-create">Tambah Kendaraan Baru</a>
+<x-layouts.admin>
+    <x-slot:title>Manajemen Kendaraan</x-slot:title>
 
-    @if(session('success'))
-        <div class="alert-success">{{ session('success') }}</div>
-    @endif
+    <div class="flex justify-end mb-4">
+        <a href="{{ route('admin.vehicles.create') }}" class="inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+            Tambah Kendaraan
+        </a>
+    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Nama Kendaraan</th>
-                <th>No. Polisi</th>
-                <th>Jenis</th>
-                <th>Lokasi Pangkalan</th>
-                <th>Status</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($vehicles as $vehicle)
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <table class="min-w-full leading-normal">
+            <thead>
                 <tr>
-                    <td>{{ $vehicle->name }}</td>
-                    <td>{{ $vehicle->license_plate }}</td>
-                    <td>{{ $vehicle->type }}</td>
-                    <td>{{ $vehicle->baseLocation->name }}</td>
-                    <td>{{ $vehicle->status }}</td>
-                    <td>
-                        <a href="{{ route('admin.vehicles.edit', $vehicle) }}" class="btn btn-edit">Edit</a>
-                        <form action="{{ route('admin.vehicles.destroy', $vehicle) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-delete" onclick="return confirm('Anda yakin ingin menghapus?')">Hapus</button>
-                        </form>
-                    </td>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Nama & No. Polisi
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Jenis & Kepemilikan
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Status
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="6">Tidak ada data kendaraan.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-</body>
-</html>
+            </thead>
+            <tbody>
+                @forelse ($vehicles as $vehicle)
+                    <tr>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <p class="text-gray-900 whitespace-no-wrap">{{ $vehicle->name }}</p>
+                            <p class="text-gray-600 whitespace-no-wrap">{{ $vehicle->license_plate }}</p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <p class="text-gray-900 whitespace-no-wrap">{{ Str::ucfirst(str_replace('_',' ',$vehicle->type)) }}</p>
+                            <p class="text-gray-600 whitespace-no-wrap">{{ Str::ucfirst($vehicle->ownership) }}</p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                                <span class="relative">{{ $vehicle->status }}</span>
+                            </span>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+                            <a href="{{ route('admin.vehicles.edit', $vehicle) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
+                            <form action="{{ route('admin.vehicles.destroy', $vehicle) }}" method="POST" class="inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Anda yakin?')">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+                            Tidak ada data kendaraan.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</x-layouts.admin>

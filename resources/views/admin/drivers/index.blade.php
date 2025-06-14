@@ -1,50 +1,67 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Manajemen Driver</title>
-    {{-- Kita akan ganti style ini dengan layout nanti --}}
-    <style> body { font-family: sans-serif; margin: 2rem; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #ccc; padding: 8px; text-align: left; } .btn { padding: 5px 10px; text-decoration: none; border-radius: 4px; color: white; } .btn-create { background-color: #28a745; margin-bottom: 1rem; display: inline-block;} .btn-edit { background-color: #ffc107; } .btn-delete { background-color: #dc3545; border: none; cursor: pointer; } .alert-success { padding: 1rem; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; margin-bottom: 1rem; } </style>
-</head>
-<body>
-    @include('admin.layouts._nav')
+<x-layouts.admin>
+    <x-slot:title>Manajemen Driver</x-slot:title>
 
-    <h1>Manajemen Driver</h1>
-    <a href="{{ route('admin.drivers.create') }}" class="btn btn-create">Tambah Driver Baru</a>
+    <div class="flex justify-end mb-4">
+        <a href="{{ route('admin.drivers.create') }}" class="inline-block px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition-colors">
+            Tambah Driver
+        </a>
+    </div>
 
-    @if(session('success'))
-        <div class="alert-success">{{ session('success') }}</div>
-    @endif
-
-    <table>
-        <thead>
-            <tr>
-                <th>Nama Driver</th>
-                <th>No. Telepon</th>
-                <th>Status</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($drivers as $driver)
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <table class="min-w-full leading-normal">
+            <thead>
                 <tr>
-                    <td>{{ $driver->name }}</td>
-                    <td>{{ $driver->phone_number }}</td>
-                    <td>{{ $driver->is_available ? 'Tersedia' : 'Tidak Tersedia' }}</td>
-                    <td>
-                        <a href="{{ route('admin.drivers.edit', $driver) }}" class="btn btn-edit">Edit</a>
-                        <form action="{{ route('admin.drivers.destroy', $driver) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-delete" onclick="return confirm('Anda yakin ingin menghapus?')">Hapus</button>
-                        </form>
-                    </td>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Nama Driver
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        No. Telepon
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Status
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="4">Tidak ada data driver.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-</body>
-</html>
+            </thead>
+            <tbody>
+                @forelse ($drivers as $driver)
+                    <tr>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <p class="text-gray-900 whitespace-no-wrap">{{ $driver->name }}</p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <p class="text-gray-900 whitespace-no-wrap">{{ $driver->phone_number }}</p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            @if($driver->is_available)
+                                <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                    <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                                    <span class="relative">Tersedia</span>
+                                </span>
+                            @else
+                                <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                                    <span aria-hidden class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
+                                    <span class="relative">Tidak Tersedia</span>
+                                </span>
+                            @endif
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+                            <a href="{{ route('admin.drivers.edit', $driver) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
+                            <form action="{{ route('admin.drivers.destroy', $driver) }}" method="POST" class="inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Anda yakin ingin menghapus driver ini?')">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+                            Tidak ada data driver.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</x-layouts.admin>
