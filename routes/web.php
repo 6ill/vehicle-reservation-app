@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('vehicles', VehicleController::class);
         Route::resource('drivers', DriverController::class);
         Route::resource('reservations', ReservationController::class);
+        Route::post('reservations/{reservation}/complete', [ReservationController::class, 'markAsCompleted'])->name('reservations.complete');
     });
 
     // Grup untuk Approver

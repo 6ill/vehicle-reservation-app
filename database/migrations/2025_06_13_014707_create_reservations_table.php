@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('start_datetime');
             $table->timestamp('end_datetime');
             $table->text('purpose');
-            $table->enum('status', ['pending', 'approved', 'rejected', 'in_progress'])->default('pending');
+            $table->enum('status', ['pending', 'approved', 'rejected', 'completed'])->default('pending');
             $table->foreignId('created_by_admin_id')->constrained('users');
             $table->timestamps();
         });

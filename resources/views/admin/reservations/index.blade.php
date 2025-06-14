@@ -15,6 +15,7 @@
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Kendaraan & Driver</th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Jadwal</th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,10 +34,44 @@
                         <p class="text-gray-600 whitespace-no-wrap">Selesai: {{ \Carbon\Carbon::parse($reservation->end_datetime)->format('d M Y, H:i') }}</p>
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <span class="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
-                            <span aria-hidden class="absolute inset-0 bg-yellow-200 opacity-50 rounded-full"></span>
+                        @php
+                            $statusTextColor = '';
+                            $statusBgColor = '';
+                            switch ($reservation->status) {
+                                case 'pending':
+                                    $statusTextColor = 'text-yellow-900';
+                                    $statusBgColor = 'bg-yellow-200';
+                                    break;
+                                case 'approved':
+                                    $statusTextColor = 'text-blue-900';
+                                    $statusBgColor = 'bg-blue-200';
+                                    break;
+                                case 'completed':
+                                    $statusTextColor = 'text-green-900';
+                                    $statusBgColor = 'bg-green-200';
+                                    break;
+                                case 'rejected':
+                                    $statusTextColor = 'text-red-900';
+                                    $statusBgColor = 'bg-red-200';
+                                    break;
+                            }
+                        @endphp
+                        <span class="relative inline-block px-3 py-1 font-semibold leading-tight {{ $statusTextColor }}">
+                            <span aria-hidden class="absolute inset-0 opacity-50 rounded-full {{ $statusBgColor }}"></span>
                             <span class="relative">{{ Str::ucfirst($reservation->status) }}</span>
                         </span>
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        @if ($reservation->status === 'approved')
+                            <form action="{{ route('admin.reservations.complete', $reservation) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded-full text-xs">
+                                    Selesaikan
+                                </button>
+                            </form>
+                        @else
+                            -
+                        @endif
                     </td>
                 </tr>
                 @empty

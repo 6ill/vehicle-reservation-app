@@ -101,35 +101,24 @@ class ReservationController extends Controller
         return redirect()->route('admin.reservations.index')->with('success', 'Reservasi berhasil dibuat dan menunggu persetujuan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function markAsCompleted(Reservation $reservation)
     {
-        //
-    }
+        if ($reservation->status !== 'approved') {
+            return redirect()->route('admin.reservations.index')->with('error', 'Hanya reservasi yang disetujui yang bisa diselesaikan.');
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        try {
+            DB::transaction(function () use ($reservation) {
+                $reservation->update(['status' => 'completed']);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+                $reservation->vehicle()->update(['status' => 'available']);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+                $reservation->driver()->update(['is_available' => true]);
+            });
+        } catch (\Exception $e) {
+            return redirect()->route('admin.reservations.index')->with('error', 'Gagal menyelesaikan reservasi: ' . $e->getMessage());
+        }
+        
+        return redirect()->route('admin.reservations.index')->with('success', 'Reservasi telah ditandai selesai.');
     }
 }
