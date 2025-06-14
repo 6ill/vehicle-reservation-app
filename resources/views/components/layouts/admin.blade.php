@@ -6,8 +6,9 @@
             <div class="p-4 text-2xl font-bold">Admin Panel</div>
             <nav class="mt-5">
                 <a href="{{ route('admin.dashboard') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Dashboard</a>
-                <a href="{{ route('admin.vehicles.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Manajemen Kendaraan</a>
-                <a href="{{ route('admin.drivers.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Manajemen Driver</a>
+                <a href="{{ route('admin.vehicles.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Kendaraan</a>
+                <a href="{{ route('admin.drivers.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Driver</a>
+                <a href="{{ route('admin.reservations.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Reservasi</a>
                 </nav>
         </aside>
 

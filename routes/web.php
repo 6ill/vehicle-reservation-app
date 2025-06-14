@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\VehicleController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,7 @@ Route::middleware('auth')->group(function () {
         // Rute-rute admin lainnya (manajemen user, kendaraan, dll) akan ada di sini
         Route::resource('vehicles', VehicleController::class);
         Route::resource('drivers', DriverController::class);
+        Route::resource('reservations', ReservationController::class);
     });
 
     // Grup untuk Approver
