@@ -9,6 +9,34 @@ use Illuminate\Support\Facades\DB;
 
 class ApprovalController extends Controller
 {
+    public function index() 
+    {
+        $userId = Auth::id();
+
+        $pendingApprovals = Approval::with(['reservation.requester', 'reservation.vehicle'])
+            ->where('approver_id', $userId)
+            ->where('status', 'pending')
+            ->get();
+            
+        $actionableApprovals = $pendingApprovals->filter(function ($approval) {
+            if ($approval->level === 1) {
+                return true;
+            }
+            
+            if ($approval->level === 2) {
+                $level1Approved = Approval::where('reservation_id', $approval->reservation_id)
+                                    ->where('level', 1)
+                                    ->where('status', 'approved')
+                                    ->exists();
+                return $level1Approved;
+            }
+
+            return false;
+        });
+
+        return view('approver.index', ['approvals' => $actionableApprovals]);
+    }
+
     public function approve(Approval $approval)
     {
         // Keamanan: Pastikan yang menyetujui adalah orang yang tepat
@@ -29,7 +57,7 @@ class ApprovalController extends Controller
             $approval->reservation()->update(['status' => 'approved']);
         }
 
-        return redirect()->route('approver.dashboard')->with('success', 'Reservasi berhasil disetujui.');
+        return redirect()->route('approver.index')->with('success', 'Reservasi berhasil disetujui.');
     }
 
     public function reject(Approval $approval)
@@ -52,6 +80,6 @@ class ApprovalController extends Controller
             $reservation->driver()->update(['is_available' => true]);
         });
 
-        return redirect()->route('approver.dashboard')->with('success', 'Reservasi telah ditolak.');
+        return redirect()->route('approver.index')->with('success', 'Reservasi telah ditolak.');
     }
 }

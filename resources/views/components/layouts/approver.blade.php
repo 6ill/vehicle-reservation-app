@@ -5,7 +5,7 @@
         <aside class="w-64 flex-shrink-0 hidden sm:block bg-gray-800 text-white">
             <div class="p-4 text-2xl font-bold">Admin Panel</div>
             <nav class="mt-5">
-                <a href="{{ route('approver.dashboard') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Dashboard</a>
+                <a href="{{ route('approver.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Dashboard</a>
             </nav>
         </aside>
 

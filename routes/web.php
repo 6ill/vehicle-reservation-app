@@ -22,7 +22,7 @@ Route::get('/', function () {
     }
 
     if ($user->role === 'approver') {
-        return redirect()->route('approver.dashboard');
+        return redirect()->route('approver.index');
     }
 
     return redirect()->route('login');
@@ -52,8 +52,8 @@ Route::middleware('auth')->group(function () {
 
     // Grup untuk Approver
     Route::middleware('role:approver')->prefix('approver')->as('approver.')->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::controller(ApprovalController::class)->prefix('approvals')->as('approvals.')->group(function() {
+        Route::controller(ApprovalController::class)->group(function() {
+            Route::get('/', 'index')->name('index');
             Route::post('/{approval}/approve', 'approve')->name('approve');
             Route::post('/{approval}/reject', 'reject')->name('reject');
         });
