@@ -12,7 +12,6 @@ class FuelLog extends Model
 
     protected $fillable = [
         'vehicle_id',
-        'reservation_id',
         'refuel_date',
         'liters_filled',
         'cost',       
@@ -21,10 +20,5 @@ class FuelLog extends Model
     public function vehicle(): BelongsTo
     {
         return $this->belongsTo(Vehicle::class);
-    }
-
-     public function reservation()
-    {
-        return $this->belongsTo(Reservation::class);
     }
 }
