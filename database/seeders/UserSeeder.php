@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Location;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,21 +15,54 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Admin
+        $kantorPusat = Location::where('type', 'kantor_pusat')->first();
+        $tambang = Location::where('type', 'tambang')->first();
+
+        
         User::create([
-            'name' => 'Admin Utama',
-            'email' => 'admin@kingnickel.com',
-            'password' => Hash::make('admin123'), 
+            'name' => 'Admin Kantor Pusat',
+            'email' => 'admin.pusat@kingnickel.com',
+            'password' => Hash::make('password123'),
             'role' => 'admin',
-            'superior_id' => null, 
+            'superior_id' => null,
+            'location_id' => $kantorPusat->id, 
         ]);
 
-        // Membuat User Approver
+        
+        User::create([
+            'name' => 'Admin Tambang',
+            'email' => 'admin.tambang@kingnickel.com',
+            'password' => Hash::make('password123'),
+            'role' => 'admin',
+            'superior_id' => null,
+            'location_id' => $tambang->id, 
+        ]);
+        
+        
+        $approverLevel2 = User::create([
+            'name' => 'Nini (Kepala Divisi)',
+            'email' => 'nini.kepdiv@kingnickel.com',
+            'password' => Hash::make('password123'),
+            'role' => 'approver',
+            'location_id' => $kantorPusat->id,
+            'superior_id' => null,
+        ]);
+
+        User::create([
+            'name' => 'Nana (Manajer)',
+            'email' => 'nana.manajer@kingnickel.com',
+            'password' => Hash::make('password123'),
+            'role' => 'approver',
+            'location_id' => $kantorPusat->id,
+            'superior_id' => $approverLevel2->id,
+        ]);
+        
         $approverLevel2 = User::create([
             'name' => 'David Sugiarto',
             'email' => 'david@kingnickel.com',
             'password' => Hash::make('approver123'), 
             'role' => 'approver',
+            'location_id' => $tambang->id,
             'superior_id' => null, 
         ]);
 
@@ -37,6 +71,7 @@ class UserSeeder extends Seeder
             'email' => 'heru@kingnickel.com',
             'password' => Hash::make('approver123'), 
             'role' => 'approver',
+            'location_id' => $tambang->id,
             'superior_id' => $approverLevel2->id, 
         ]);
     }

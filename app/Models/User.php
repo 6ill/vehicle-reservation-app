@@ -24,7 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'superior_id'
+        'superior_id',
+        'location_id'
     ];
 
     /**
@@ -53,6 +54,11 @@ class User extends Authenticatable
     public function superior(): BelongsTo
     {
         return $this->belongsTo(User::class, 'superior_id');
+    }
+
+    public function location(): BelongsTo
+    {
+        return $this->belongsTo(Location::class);
     }
 
     public function subordinates(): HasMany

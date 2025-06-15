@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->foreignId('superior_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('location_id')->constrained('locations')->onDelete('set null');
             $table->string('password');
             $table->enum('role', ['admin', 'approver']);
             $table->rememberToken();
