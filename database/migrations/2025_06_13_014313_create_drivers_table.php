@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('location_id')->constrained('locations')->onDelete('set null');
             $table->string('name');
             $table->string('phone_number', 20);
             $table->boolean('is_available')->default(true);

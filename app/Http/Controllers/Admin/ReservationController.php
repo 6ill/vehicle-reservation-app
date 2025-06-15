@@ -20,7 +20,8 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        $reservations = Reservation::with(['requester', 'vehicle', 'driver'])->latest()->get();
+        $user = Auth::user();
+        $reservations = Reservation::with(['requester', 'vehicle', 'driver'])->where('start_location_id', $user->location_id)->latest()->get();
         return view('admin.reservations.index', compact('reservations'));
     }
 
@@ -29,12 +30,12 @@ class ReservationController extends Controller
      */
     public function create()
     {
-        $employees = Employee::orderBy('name')->get();
-        $vehicles = Vehicle::where('status', 'available')->orderBy('name')->get();
-        $drivers = Driver::where('is_available', true)->orderBy('name')->get();
-        $locations = Location::orderBy('name')->get();
+        $user = Auth::user();
+        $employees = Employee::orderBy('name')->where('location_id', $user->location_id)->get();
+        $vehicles = Vehicle::where('status', 'available')->where('base_location_id', $user->location_id)->orderBy('name')->get();
+        $drivers = Driver::where('is_available', true)->where('location_id', $user->location_id)->orderBy('name')->get();
 
-        return view('admin.reservations.create', compact('employees', 'vehicles', 'drivers', 'locations'));
+        return view('admin.reservations.create', compact('employees', 'vehicles', 'drivers'));
     }
 
     /**
@@ -46,7 +47,6 @@ class ReservationController extends Controller
             'requester_id' => 'required|exists:employees,id',
             'vehicle_id' => 'required|exists:vehicles,id',
             'driver_id' => 'required|exists:drivers,id',
-            'start_location_id' => 'required|exists:locations,id',
             'destination' => 'required|string|max:255',
             'start_datetime' => 'required|date',
             'end_datetime' => 'required|date|after_or_equal:start_datetime',
@@ -55,6 +55,7 @@ class ReservationController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
+                $user = Auth::user();
                 $employee = Employee::find($request->requester_id);
                 $level1Approver = $employee->superior; 
                 $level2Approver = $level1Approver ? $level1Approver->superior : null; // Nini
@@ -67,7 +68,7 @@ class ReservationController extends Controller
                     'requester_id' => $request->requester_id,
                     'vehicle_id' => $request->vehicle_id,
                     'driver_id' => $request->driver_id,
-                    'start_location_id' => $request->start_location_id,
+                    'start_location_id' => $user->location_id,
                     'destination' => $request->destination,
                     'start_datetime' => $request->start_datetime,
                     'end_datetime' => $request->end_datetime,

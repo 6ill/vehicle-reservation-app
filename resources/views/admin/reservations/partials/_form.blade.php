@@ -41,7 +41,7 @@
             </div>
         </div>
         <div>
-            <div class="mb-4">
+            {{-- <div class="mb-4">
                 <label for="start_location_id" class="block text-sm font-medium text-gray-700">Lokasi Awal</label>
                 <select id="start_location_id" name="start_location_id" required>
                     <option value="">Pilih Lokasi Awal...</option>
@@ -49,7 +49,7 @@
                         <option value="{{ $location->id }}" @selected(old('start_location_id') == $location->id)>{{ $location->name }}</option>
                     @endforeach
                 </select>
-            </div>
+            </div> --}}
             <x-form.input label="Destinasi Tujuan" name="destination" required />
             <x-form.input label="Waktu Mulai" type="datetime-local" name="start_datetime" required />
             <x-form.input label="Waktu Selesai" type="datetime-local" name="end_datetime" required />

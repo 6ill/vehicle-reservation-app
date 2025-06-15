@@ -5,17 +5,20 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ChartController extends Controller
 {
-     public function reservationData()
+    public function reservationData()
     {
+        $user = Auth::user();
         $reservationsByMonth = Reservation::select(
             DB::raw("COUNT(*) as count"), 
             DB::raw("TO_CHAR(start_datetime, 'YYYY-MM') as month")
         )
             ->where('start_datetime', '>=', Carbon::now()->subYear())
+            ->where('start_location_id', $user->location_id)
             ->groupBy('month')
             ->orderBy('month', 'asc')
             ->get();

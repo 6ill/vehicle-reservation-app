@@ -60,7 +60,7 @@ class UserSeeder extends Seeder
         $approverLevel2 = User::create([
             'name' => 'David Sugiarto',
             'email' => 'david@kingnickel.com',
-            'password' => Hash::make('approver123'), 
+            'password' => Hash::make('password123'), 
             'role' => 'approver',
             'location_id' => $tambang->id,
             'superior_id' => null, 
@@ -69,7 +69,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Anthony Heru',
             'email' => 'heru@kingnickel.com',
-            'password' => Hash::make('approver123'), 
+            'password' => Hash::make('password123'), 
             'role' => 'approver',
             'location_id' => $tambang->id,
             'superior_id' => $approverLevel2->id, 

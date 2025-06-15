@@ -12,14 +12,14 @@ class VehicleController extends Controller
 {
     public function index()
     {
-        $vehicles = Vehicle::with('baseLocation')->latest()->get();
+        $user = Auth::user();
+        $vehicles = Vehicle::with('baseLocation')->where('base_location_id', $user->location_id)->latest()->get();
         return view('admin.vehicles.index', compact('vehicles'));
     }
 
     public function create()
     {
-        $locations = Location::all();
-        return view('admin.vehicles.create', compact('locations'));
+        return view('admin.vehicles.create');
     }
 
     public function store(Request $request)
@@ -30,10 +30,10 @@ class VehicleController extends Controller
             'type' => 'required|in:angkutan_orang,angkutan_barang',
             'ownership' => 'required|in:company,rental',
             'status' => 'required|in:available,in_use,maintenance',
-            'base_location_id' => 'required|exists:locations,id',
         ]);
 
-        Vehicle::create($request->all());
+        $user = Auth::user();
+        Vehicle::create($request->all() + ['base_location_id' => $user->location_id]);
 
         $user = Auth::user();
         log_activity('CREATE_VEHICLE', "Admin {$user->id} menambahkan kendaraan {$request->name} {$request->license_plate}");
@@ -46,8 +46,10 @@ class VehicleController extends Controller
 
     public function edit(Vehicle $vehicle)
     {
-        $locations = Location::all();
-        return view('admin.vehicles.edit', compact('vehicle', 'locations'));
+        if ($vehicle->base_location_id !== Auth::user()->location_id) {
+            abort(403, 'AKSES DITOLAK. ANDA TIDAK BERHAK MENGEDIT DATA DARI LOKASI LAIN.');
+        }
+        return view('admin.vehicles.edit', compact('vehicle'));
     }
 
     public function update(Request $request, Vehicle $vehicle)
@@ -58,7 +60,6 @@ class VehicleController extends Controller
             'type' => 'required|in:angkutan_orang,angkutan_barang',
             'ownership' => 'required|in:company,rental',
             'status' => 'required|in:available,in_use,maintenance',
-            'base_location_id' => 'required|exists:locations,id',
         ]);
 
         $vehicle->update($request->all());

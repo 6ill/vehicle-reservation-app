@@ -11,7 +11,8 @@ class DriverController extends Controller
 {
     public function index()
     {
-        $drivers = Driver::latest()->get();
+        $user = Auth::user();
+        $drivers = Driver::latest()->where('location_id', $user->location_id)->get();
         return view('admin.drivers.index', compact('drivers'));
     }
 
@@ -28,7 +29,8 @@ class DriverController extends Controller
             'is_available' => 'required|boolean',
         ]);
 
-        Driver::create($request->all());
+        $user = Auth::user();
+        Driver::create($request->all() + ['location_id' => $user->location_id]);
         
         $user = Auth::user();
         log_activity('CREATE_DRIVER', "Admin {$user->id} menambah driver");
@@ -40,6 +42,9 @@ class DriverController extends Controller
 
     public function edit(Driver $driver)
     {
+        if ($driver->location_id !== Auth::user()->location_id) {
+            abort(403, 'AKSES DITOLAK. ANDA TIDAK BERHAK MENGEDIT DATA DARI LOKASI LAIN.');
+        }
         return view('admin.drivers.edit', compact('driver'));
     }
 
