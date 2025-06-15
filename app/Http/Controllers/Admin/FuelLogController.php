@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FuelLog;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FuelLogController extends Controller
 {
@@ -40,6 +41,9 @@ class FuelLogController extends Controller
         // Menggunakan relasi untuk membuat log baru, vehicle_id terisi otomatis
         $vehicle->fuelLogs()->create($request->all());
 
+        $user = Auth::user();
+        log_activity('CREATE_FUEL_LOG', "Admin {$user->id}  membuat catatan BBM untuk {$vehicle->id}");
+
         return redirect()->route('admin.vehicles.fuel-logs.index', $vehicle)
             ->with('success', 'Log BBM berhasil ditambahkan.');
     }
@@ -65,6 +69,8 @@ class FuelLogController extends Controller
         ]);
 
         $fuelLog->update($request->all());
+        $user = Auth::user();
+        log_activity('UPDATE_FUEL_LOG', "Admin {$user->id} mengedit catatan BBM {$fuelLog->id}");
 
         return redirect()->route('admin.vehicles.fuel-logs.index', $fuelLog->vehicle)
             ->with('success', 'Log BBM berhasil diperbarui.');
@@ -77,6 +83,10 @@ class FuelLogController extends Controller
     {
         $vehicle = $fuelLog->vehicle; 
         $fuelLog->delete();
+
+        $user = Auth::user();
+        log_activity('DELETE_FUEL_LOG', "Admin {$user->id} menghapus catatan BBM {$fuelLog->id}");
+
 
         return redirect()->route('admin.vehicles.fuel-logs.index', $vehicle)
             ->with('success', 'Log BBM berhasil dihapus.');

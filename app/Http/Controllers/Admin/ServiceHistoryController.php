@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ServiceHistory;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceHistoryController extends Controller
 {
@@ -30,6 +31,9 @@ class ServiceHistoryController extends Controller
 
         $vehicle->serviceHistory()->create($request->all());
 
+        $user = Auth::user();
+        log_activity('CREATE_SERVICE_HISTORY', "Admin {$user->id} menambahkan riwayat servis untuk kendaraan {$vehicle->id}");
+
         return redirect()->route('admin.vehicles.service-history.index', $vehicle)
             ->with('success', 'Catatan servis berhasil ditambahkan.');
     }
@@ -50,6 +54,9 @@ class ServiceHistoryController extends Controller
 
         $serviceHistory->update($request->all());
 
+        $user = Auth::user();
+        log_activity('UPDATE_SERVICE_HISTORY', "Admin {$user->id} mengedit riwayat servis  {$serviceHistory->id}");
+
         return redirect()->route('admin.vehicles.service-history.index', $serviceHistory->vehicle)
             ->with('success', 'Catatan servis berhasil diperbarui.');
     }
@@ -58,6 +65,9 @@ class ServiceHistoryController extends Controller
     {
         $vehicle = $serviceHistory->vehicle;
         $serviceHistory->delete();
+
+        $user = Auth::user();
+        log_activity('DELETE_SERVICE_HISTORY', "Admin {$user->id} menghapus riwayat servis {$serviceHistory->id}");
 
         return redirect()->route('admin.vehicles.service-history.index', $vehicle)
             ->with('success', 'Catatan servis berhasil dihapus.');

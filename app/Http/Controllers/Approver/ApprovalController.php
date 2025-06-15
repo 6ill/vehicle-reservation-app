@@ -46,7 +46,7 @@ class ApprovalController extends Controller
 
         // Update status persetujuan ini
         $approval->update(['status' => 'approved', 'approved_at' => now()]);
-
+        log_activity('APPROVE_RESERVATION', "Approver {$approval->approver_id} menyetujui reservasi #{$approval->reservation_id} pada level {$approval->level}");
         // Cek apakah semua level sudah menyetujui
         $allApproved = Approval::where('reservation_id', $approval->reservation_id)
                                ->where('status', '!=', 'approved')
@@ -78,6 +78,8 @@ class ApprovalController extends Controller
             // Kembalikan status kendaraan dan driver menjadi tersedia
             $reservation->vehicle()->update(['status' => 'available']);
             $reservation->driver()->update(['is_available' => true]);
+
+            log_activity('REJECT_RESERVATION', "Approver {$approval->approver_id} menolak reservasi #{$approval->reservation_id} pada level {$approval->level}");
         });
 
         return redirect()->route('approver.index')->with('success', 'Reservasi telah ditolak.');

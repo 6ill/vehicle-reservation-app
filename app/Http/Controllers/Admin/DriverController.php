@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Driver;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DriverController extends Controller
 {
@@ -28,6 +29,9 @@ class DriverController extends Controller
         ]);
 
         Driver::create($request->all());
+        
+        $user = Auth::user();
+        log_activity('CREATE_DRIVER', "Admin {$user->id} menambah driver");
 
         return redirect()
         ->route('admin.drivers.index')                 
@@ -49,6 +53,9 @@ class DriverController extends Controller
 
         $driver->update($request->all());
 
+        $user = Auth::user();
+        log_activity('UPDATE_DRIVER', "Admin {$user->id} mengedit driver {$driver->id}");
+
         return redirect()
         ->route('admin.drivers.index')
         ->with('success', 'Data driver berhasil diperbarui.');
@@ -57,6 +64,9 @@ class DriverController extends Controller
     public function destroy(Driver $driver)
     {
         $driver->delete();
+
+        $user = Auth::user();
+        log_activity('DELETE_DRIVER', "Admin {$user->id} menghapus driver {$driver->id}");
 
         return redirect()
         ->route('admin.drivers.index')

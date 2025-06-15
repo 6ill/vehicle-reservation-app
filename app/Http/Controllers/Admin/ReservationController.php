@@ -90,9 +90,11 @@ class ReservationController extends Controller
                     'status' => 'pending',
                 ]);
 
-                // d. Update status kendaraan dan driver
                 Vehicle::find($request->vehicle_id)->update(['status' => 'in_use']);
                 Driver::find($request->driver_id)->update(['is_available' => false]);
+
+                $employee = Employee::find($request->requester_id);
+                log_activity('CREATE_RESERVATION', "Admin membuat reservasi #{$reservation->id} untuk {$employee->name}");
             });
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal membuat reservasi: ' . $e->getMessage())->withInput();
@@ -115,6 +117,7 @@ class ReservationController extends Controller
 
                 $reservation->driver()->update(['is_available' => true]);
             });
+            log_activity('COMPLETE_RESERVATION', "Admin menyelesaikan reservasi #{$reservation->id}");
         } catch (\Exception $e) {
             return redirect()->route('admin.reservations.index')->with('error', 'Gagal menyelesaikan reservasi: ' . $e->getMessage());
         }
