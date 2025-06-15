@@ -1,66 +1,63 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Aplikasi Reservasi Kendaraan
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web sederhana yang dibangun dengan Laravel untuk mengelola proses pemesanan dan monitoring kendaraan di sebuah perusahaan tambang.
 
-## About Laravel
+## Fitur Utama
+- Manajemen data master (Kendaraan, Driver, Lokasi, Pegawai, User).
+- Proses pemesanan kendaraan oleh Admin.
+- Alur persetujuan berjenjang (2 level).
+- Dashboard khusus untuk Approver memberikan persetujuan.
+- Pencatatan riwayat pemakaian (BBM & Servis).
+- Dashboard monitoring dengan visualisasi data (grafik).
+- Laporan periodik yang dapat diekspor ke format Excel.
+- Pencatatan log aktivitas untuk setiap proses penting.
+- UI/UX yang modern dan responsif menggunakan Tailwind CSS.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Spesifikasi Teknis
+- **PHP Version**: 8.3.7
+- **Framework**: Laravel 12.x
+- **Database**: PostgreSQL 15
+- **Frontend**: Tailwind CSS, Chart.js, Tom Select
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Panduan Instalasi
+1.  Clone repositori ini: `git clone [URL_REPO_ANDA]`
+2.  Masuk ke direktori proyek: `cd [NAMA_PROYEK]`
+3.  Instal dependensi Composer: `composer install`
+4.  Instal dependensi NPM: `npm install && npm run build`
+5.  Salin file environment: `cp .env.example .env`
+6.  Buat kunci aplikasi: `php artisan key:generate`
+7.  Konfigurasi koneksi database Anda di dalam file `.env`.
+8.  Jalankan migrasi dan seeder untuk membuat tabel dan data awal:
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
+9.  Jalankan server pengembangan: `php artisan serve`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Panduan Penggunaan
 
-## Learning Laravel
+Aplikasi ini memiliki 2 peran utama yang dapat login: Admin dan Approver.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Akun Pengguna (Default)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+**1. Akun Admin**
+-   **Email**: `admin@perusahaan.com`
+-   **Password**: `password123`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**2. Akun Approver (Level 1)**
+-   **Email**: `nana.manajer@perusahaan.com`
+-   **Password**: `password123`
 
-## Laravel Sponsors
+**3. Akun Approver (Level 2)**
+-   **Email**: `nini.kepdiv@perusahaan.com`
+-   **Password**: `password123`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Alur Kerja
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1.  **Admin** login ke sistem.
+2.  Admin dapat mengelola data master seperti Kendaraan dan Driver.
+3.  Admin membuat **Reservasi Baru** atas nama seorang pegawai. Sistem akan secara otomatis menentukan alur persetujuan ke Nana (Lvl 1) dan Nini (Lvl 2).
+4.  **Nana (Approver Lvl 1)** login. Di dashboard-nya, ia akan melihat permintaan reservasi dan dapat menyetujui atau menolaknya.
+5.  Jika Nana setuju, permintaan akan muncul di dashboard **Nini (Approver Lvl 2)** untuk persetujuan akhir.
+6.  Setelah reservasi disetujui sepenuhnya, Admin dapat melihat statusnya menjadi "Approved".
+7.  Setelah perjalanan selesai, Admin dapat menekan tombol "Selesaikan" untuk menutup reservasi dan membuat kendaraan/driver tersedia kembali.
+8.  Admin dapat melihat **Laporan Reservasi** dan mengekspornya ke Excel.
