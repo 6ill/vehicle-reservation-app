@@ -39,16 +39,30 @@ Aplikasi ini memiliki 2 peran utama yang dapat login: Admin dan Approver.
 
 ### Akun Pengguna (Default)
 
+**Kantor Pusat**
 **1. Akun Admin**
--   **Email**: `admin@perusahaan.com`
+-   **Email**: `admin.pusat@kingnickel.com`
 -   **Password**: `password123`
 
 **2. Akun Approver (Level 1)**
--   **Email**: `nana.manajer@perusahaan.com`
+-   **Email**: `nana.manajer@kingnickel.com`
 -   **Password**: `password123`
 
 **3. Akun Approver (Level 2)**
--   **Email**: `nini.kepdiv@perusahaan.com`
+-   **Email**: `nini.kepdiv@kingnickel.com`
+-   **Password**: `password123`
+
+**Tambang**
+**1. Akun Admin**
+-   **Email**: `admin.tambang@kingnickel.com`
+-   **Password**: `password123`
+
+**2. Akun Approver (Level 1)**
+-   **Email**: `heru@kingnickel.com`
+-   **Password**: `password123`
+
+**3. Akun Approver (Level 2)**
+-   **Email**: `david@kingnickel.com`
 -   **Password**: `password123`
 
 ### Alur Kerja
