@@ -15,6 +15,9 @@ class FuelLogController extends Controller
      */
     public function index(Vehicle $vehicle)
     {
+        if ($vehicle->base_location_id !== Auth::user()->location_id) {
+            abort(403, 'AKSES DITOLAK. ANDA TIDAK BERHAK MELIHAT DATA DARI LOKASI LAIN.');
+        }
         $logs = $vehicle->fuelLogs()->latest('refuel_date')->paginate(10);
         return view('admin.fuel-logs.index', compact('vehicle', 'logs'));
     }
@@ -24,6 +27,9 @@ class FuelLogController extends Controller
      */
     public function create(Vehicle $vehicle)
     {
+        if ($vehicle->base_location_id !== Auth::user()->location_id) {
+            abort(403, 'AKSES DITOLAK. ANDA TIDAK BERHAK MENGEDIT DATA DARI LOKASI LAIN.');
+        }
         return view('admin.fuel-logs.create', compact('vehicle'));
     }
 
@@ -54,6 +60,9 @@ class FuelLogController extends Controller
     public function edit(FuelLog $fuelLog)
     {
         $vehicle = $fuelLog->vehicle;
+        if ($vehicle->base_location_id !== Auth::user()->location_id) {
+            abort(403, 'AKSES DITOLAK. ANDA TIDAK BERHAK MENGEDIT DATA DARI LOKASI LAIN.');
+        }
         return view('admin.fuel-logs.edit', compact('fuelLog', 'vehicle'));
     }
 

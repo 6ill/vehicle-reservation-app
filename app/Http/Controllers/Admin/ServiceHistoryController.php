@@ -12,12 +12,18 @@ class ServiceHistoryController extends Controller
 {
     public function index(Vehicle $vehicle)
     {
+        if ($vehicle->base_location_id !== Auth::user()->location_id) {
+            abort(403, 'AKSES DITOLAK. ANDA TIDAK BERHAK MELIHAT DATA DARI LOKASI LAIN.');
+        }
         $histories = $vehicle->serviceHistory()->latest('service_date')->paginate(10);
         return view('admin.service-history.index', compact('vehicle', 'histories'));
     }
 
     public function create(Vehicle $vehicle)
     {
+        if ($vehicle->base_location_id !== Auth::user()->location_id) {
+            abort(403, 'AKSES DITOLAK. ANDA TIDAK BERHAK MENGEDIT DATA DARI LOKASI LAIN.');
+        }
         return view('admin.service-history.create', compact('vehicle'));           
     }
 
@@ -41,6 +47,9 @@ class ServiceHistoryController extends Controller
     public function edit(ServiceHistory $serviceHistory)
     {
         $vehicle = $serviceHistory->vehicle;
+        if ($vehicle->base_location_id !== Auth::user()->location_id) {
+            abort(403, 'AKSES DITOLAK. ANDA TIDAK BERHAK MENGEDIT DATA DARI LOKASI LAIN.');
+        }
         return view('admin.service-history.edit', compact('serviceHistory', 'vehicle'));
     }
 
