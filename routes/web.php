@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\ChartController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\FuelLogController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\ServiceHistoryController;
 use App\Http\Controllers\Admin\VehicleController;
@@ -38,9 +41,7 @@ Route::middleware('auth')->group(function () {
 
      // Grup untuk Admin
     Route::middleware('role:admin')->prefix('admin')->as('admin.')->group(function () {
-        Route::get('/dashboard', function () {
-            return '<h1>Selamat Datang di Dashboard Admin</h1>';
-        })->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('vehicles', VehicleController::class);
         Route::resource('vehicles.fuel-logs', FuelLogController::class)->shallow();
@@ -48,6 +49,13 @@ Route::middleware('auth')->group(function () {
         Route::resource('drivers', DriverController::class);
         Route::resource('reservations', ReservationController::class);
         Route::post('reservations/{reservation}/complete', [ReservationController::class, 'markAsCompleted'])->name('reservations.complete');
+
+        Route::get('/api/charts/reservations', [ChartController::class, 'reservationData'])->name('api.charts.reservations');
+    
+        Route::controller(ReportController::class)->prefix('reports')->as('reports.')->group(function() {
+            Route::get('/reservations', 'index')->name('reservations.index');
+            Route::get('/reservations/export', 'export')->name('reservations.export');
+        });
     });
 
     // Grup untuk Approver

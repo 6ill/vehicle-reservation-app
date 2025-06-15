@@ -9,6 +9,7 @@
                 <a href="{{ route('admin.vehicles.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Kendaraan</a>
                 <a href="{{ route('admin.drivers.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Driver</a>
                 <a href="{{ route('admin.reservations.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Reservasi</a>
+                <a href="{{ route('admin.reports.reservations.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Laporan</a>
                 </nav>
         </aside>
 
